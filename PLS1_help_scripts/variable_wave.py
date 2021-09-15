@@ -12,7 +12,7 @@ class firstSellectionVariables (BaseEstimator):
                 dispersion[i,j]=(1/x.shape[0])*(sum((x[:,i,j]-x[:,i,j].mean())**2))
         self.dispersion=dispersion
         
-    def selectionExctationWave(self,x,waveExcitation, waveEmission):
+    def selectionWave(self,x,waveExcitation, waveEmission):
         excitation=dict()
         for i in range(0,x.shape[2]):
             excitation[max(self.dispersion[:,i])]=i
