@@ -1,5 +1,18 @@
 from sklearn.base import BaseEstimator
 import numpy as np
+"""
+This class calculate the variances of cells. For example
+we can take 240 wave of excitation and 500 wave of emission
+and all 35 samples and made from this a vector. This vector
+has length 35. And then, we calculate the variance in this
+vector. The meaning of variance we put on the matrix of
+variance. Similary we chose other meanings. Then we sorting
+our matrix on axis excitation wavelength. we delete columns
+from matrix with small meaning of variance. Then we sorting
+this matrix on axis of emission wavelength. Then we remove from
+our data wavelenght with small meaning of variance. residuals of
+data we put on the regression class.
+"""
 class firstSellectionVariables (BaseEstimator):
     def __init__(self, var_excitation=0.01, var_emission=0.2):
         self.var_excitation=var_excitation

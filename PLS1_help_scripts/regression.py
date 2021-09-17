@@ -8,7 +8,18 @@ from sklearn.model_selection import GridSearchCV
 import pandas as pd
 import numpy as np
 from PLS1_help_scripts.variable_wave import firstSellectionVariables
-
+"""
+This class use the variable_wave.py. It is a script in this folder.
+Class firstSellectionVariables chose wave length with big variance
+in vector of samples. We build a regression model on reduced data.
+It is more usability than use all wavelength which we have. Firstly,
+this method is more quickly. We chose 3 parameters:
+number of components
+variance on excitation axis of matrix of variance
+variance on emission axis of matrix of variance
+The algorithm need have 2 variance parametrs, because
+this parameters have different optimal meanings.
+"""
 class new_PLS1_regression(RegressorMixin,BaseEstimator):
     def __init__(self, var_excitation=0.01, var_emission=0.2, n_components=2):
         self.var_excitation=var_excitation
@@ -23,7 +34,7 @@ class new_PLS1_regression(RegressorMixin,BaseEstimator):
         Data with small variance of data is not useful. 
         Secondly, I make a selection of number of components in PLS1 regression. 
         I find not only the number of components. I find the best variance, because
-        I dont know how many useful cell in the spectra of fluorescent.
+        I dont know how many useful cells in the spectra of fluorescent.
         """
         model1=firstSellectionVariables(var_excitation=self.var_excitation,
                                        var_emission=self.var_emission)
