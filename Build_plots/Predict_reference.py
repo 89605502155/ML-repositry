@@ -13,7 +13,9 @@ class PR_plts():
                  line_color="blue", form_marker=".",
                  form_line="-", language_axis="ru",
                  save_fig=False,
-                 rounding_long=2, ms=30, lw=3):
+                 rounding_long=2, ms=30, lw=3,
+                 number_x_mark=10,
+                 number_y_mark=10):
         self.marker_color=marker_color
         self.line_color=line_color
         self.form_marker=form_marker
@@ -23,6 +25,8 @@ class PR_plts():
         self.rounding_long=rounding_long
         self.ms=ms
         self.lw=lw
+        self.number_x_mark=number_x_mark
+        self.number_y_mark=number_y_mark
 
     def go_to_numpy(self,a):
         if isinstance(a, pd.Series):
@@ -58,19 +62,46 @@ class PR_plts():
         del(tr1)
         return [n2,n1]
 
-    def optimal_num(self,a):
+    def er_num(self,fr,ax,n):
         #This function calculate the optimal number of marks on the grid
-        
-    def axs_marker(self,fr):
-        numm=int((fr[1]-fr[0])*math.pow(10,self.rounding_long))
-        self.optimal_num(numm)
+        n1=n
         a=-1
-        for i in range(2,11):
-            if num%i==0:
+        #print(n1)
+        while True:
+            for i in range(5,ax+1):
+                if n1%i==0:
+                    a=i
+                    break
+            if a!=-1:
+                break
+            n1+=1
+        #print(n1)
+        delta=n1-n
+        lev=delta//2
+        prav=delta-lev
+        fr_0_loc=round(fr[0]-(lev*math.pow(0.1,self.rounding_long)),
+                       self.rounding_long)
+        fr_1_loc=round(fr[1]+(prav*math.pow(0.1,self.rounding_long)),
+                       self.rounding_long)
+        #print(fr_0_loc,fr_1_loc,a)
+        return np.linspace(fr_0_loc,
+                           fr_1_loc, num = a+1)
+        
+        
+    def axs_marker(self,fr,ax):
+        #ax - max number of marks on the grid
+        numm=round((fr[1]-fr[0])*math.pow(10,self.rounding_long))
+        print(numm,fr)
+        a=-1
+        for i in range(4,ax+1):
+            if numm%i==0:
                 a=i
         if a==-1:
-            
-        print(np.linspace(fr[0], fr[1], num = numm+1))
+            print(self.er_num(fr,ax,numm))
+        else:
+            print(np.linspace(fr[0], fr[1], num = a+1))
+            print(a)
+        
         
     def main(self, tru_dat_inp, pred_dat_inp):
         self.round_ex() #It is a function which make string example of
@@ -80,8 +111,8 @@ class PR_plts():
         a1=self.set_data_fig(tru_dat) #make a frame for grid of axis
         a2=self.set_data_fig(pred_dat_inp) #make a frame for grid of axis
 
-        self.axs_marker(a1)
-        self.axs_marker(a2)
+        self.axs_marker(a1,self.number_x_mark)
+        self.axs_marker(a2,self.number_x_mark)
 
 a=PR_plts()
-t=a.main([1.009,1.1,2,2.111],[1.001,2,2])
+t=a.main([1.009,1.1,2,2.111],[1,2.06])
