@@ -167,16 +167,17 @@ class PR_plts():
         a2=self.set_data_fig(pred_dat_inp) #make a frame for grid of axis
 
         self.x_mark_num=self.axs_marker(a1,self.number_x_mark)
-        self.y_mark_num=self.axs_marker(a2,self.number_y_mark)
+        a3=[min(a1[0],a2[0]),max(a1[1],a2[1])]
+        self.y_mark_num=self.axs_marker(a3,self.number_y_mark)
         #predict data will be on the y-axsis
-        print(self.x_mark_num)
-        print(self.y_mark_num)
+        #print(self.x_mark_num)
+        #print(self.y_mark_num)
         self.to_decimal()
-        print(self.x_mark_decim)
-        print(self.y_mark_decim)
-        print(tru_dat)
-        print(pred_dat)
+        #print(self.x_mark_decim)
+        #print(self.y_mark_decim)
+        #print(tru_dat)
+        #print(pred_dat)
         self.plot_fig(tru_dat,pred_dat)
 
 #a=PR_plts(save_fig=True, language_axis='en')
-#t=a.main([1.009,1.1,2,2.111],[1,2,2,6.06])
+#t=a.main([1.009,1.1,2,2.111],[2,2,2,6.06])
