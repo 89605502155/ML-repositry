@@ -16,7 +16,8 @@ class PR_plts():
                  rounding_long=2, ms=30, lw=3,
                  number_x_mark=10,
                  number_y_mark=10,
-                 name_plot='',
+                 font_family='Times New Roman',
+                 name_plot='N-pls1 for Humic',
                  end_name_for_file='picture_1'):
         self.marker_color=marker_color
         self.line_color=line_color
@@ -27,6 +28,7 @@ class PR_plts():
         self.rounding_long=rounding_long
         self.ms=ms
         self.lw=lw
+        self.font_family=font_family
         self.number_x_mark=number_x_mark
         self.number_y_mark=number_y_mark
         self.name_plot=name_plot
@@ -125,12 +127,15 @@ class PR_plts():
         if self.language_axis=='ru':
             return ["Предсказанные значения","Истинные значения",
                     "График введено-найдено"]
+        if self.language_axis=='en':
+            return ["Predict","Reference",
+                    "Predict-reference"]
             
     def plot_fig(self, t, p):
-        mpl.rc('font',family='Times New Roman')
+        mpl.rc('font',family=self.font_family)
         fig, axs = plt.subplots(figsize=(12, 7))
-        axs.plot(t,p,".",color="red",ms=30)
-        axs.plot(t,t,color="blue",lw=3)
+        axs.plot(t,p,".",color=self.marker_color,ms=self.ms)
+        axs.plot(t,t,color=self.line_color,lw=self.lw)
         axs.set_xticks(self.x_mark_num)
         axs.set_yticks(self.y_mark_num)
         axs.grid(color="black",linewidth=0.7)
@@ -140,10 +145,17 @@ class PR_plts():
         loc_name_axs=self.lang_axis()
         axs.set_ylabel(loc_name_axs[0] , fontsize=25,labelpad=8)
         axs.set_xlabel(loc_name_axs[1],  fontsize=25,labelpad=15)
-        axs.set_title(loc_name_axs[2],
+        axs.set_title(loc_name_axs[2]+' '+self.name_plot,
                       fontsize=28,loc="center" ,
                       pad=15)
+        axs.set_xticklabels(self.x_mark_decim, fontsize=20)
+        axs.set_yticklabels(self.y_mark_decim, fontsize=20)
         axs.tick_params(which='major', length=10, width=2)
+        if self.save_fig==True:
+            plt.savefig(self.end_name_for_file+'.png',
+                        format='png', dpi=300)
+            plt.savefig(self.end_name_for_file+".svg",
+                        format="svg")
         plt.show();
 
     def main(self, tru_dat_inp, pred_dat_inp):
@@ -166,5 +178,5 @@ class PR_plts():
         print(pred_dat)
         self.plot_fig(tru_dat,pred_dat)
 
-a=PR_plts()
-t=a.main([1.009,1.1,2,2.111],[1,2,2,6.06])
+#a=PR_plts(save_fig=True, language_axis='en')
+#t=a.main([1.009,1.1,2,2.111],[1,2,2,6.06])
