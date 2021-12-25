@@ -15,7 +15,9 @@ class PR_plts():
                  save_fig=False,
                  rounding_long=2, ms=30, lw=3,
                  number_x_mark=10,
-                 number_y_mark=10):
+                 number_y_mark=10,
+                 name_plot='',
+                 end_name_for_file='picture_1'):
         self.marker_color=marker_color
         self.line_color=line_color
         self.form_marker=form_marker
@@ -27,6 +29,8 @@ class PR_plts():
         self.lw=lw
         self.number_x_mark=number_x_mark
         self.number_y_mark=number_y_mark
+        self.name_plot=name_plot
+        self.end_name_for_file=end_name_for_file
 
     def go_to_numpy(self,a):
         if isinstance(a, pd.Series):
@@ -91,18 +95,57 @@ class PR_plts():
     def axs_marker(self,fr,ax):
         #ax - max number of marks on the grid
         numm=round((fr[1]-fr[0])*math.pow(10,self.rounding_long))
-        print(numm,fr)
+        #print(numm,fr)
         a=-1
         for i in range(4,ax+1):
             if numm%i==0:
                 a=i
         if a==-1:
-            print(self.er_num(fr,ax,numm))
+            return (self.er_num(fr,ax,numm))
         else:
-            print(np.linspace(fr[0], fr[1], num = a+1))
-            print(a)
+            return (np.linspace(fr[0], fr[1], num = a+1))
         
-        
+    def to_decimal(self):
+        list_x=list()
+        for i in self.x_mark_num:
+            list_x.append(Decimal(str(i)).
+                                  quantize(Decimal(self.
+                                                   float_decimal_ex)))
+        self.x_mark_decim=list_x
+        del(list_x)
+        list_y=list()
+        for i in self.y_mark_num:
+            list_y.append(Decimal(str(i)).
+                                  quantize(Decimal(self.
+                                                   float_decimal_ex)))
+        self.y_mark_decim=list_y
+        del(list_y)
+
+    def lang_axis(self):
+        if self.language_axis=='ru':
+            return ["Предсказанные значения","Истинные значения",
+                    "График введено-найдено"]
+            
+    def plot_fig(self, t, p):
+        mpl.rc('font',family='Times New Roman')
+        fig, axs = plt.subplots(figsize=(12, 7))
+        axs.plot(t,p,".",color="red",ms=30)
+        axs.plot(t,t,color="blue",lw=3)
+        axs.set_xticks(self.x_mark_num)
+        axs.set_yticks(self.y_mark_num)
+        axs.grid(color="black",linewidth=0.7)
+        axs.tick_params(which='major', length=10, width=2)
+        axs.get_xaxis().set_tick_params(direction='in')
+        axs.get_yaxis().set_tick_params(direction='in')
+        loc_name_axs=self.lang_axis()
+        axs.set_ylabel(loc_name_axs[0] , fontsize=25,labelpad=8)
+        axs.set_xlabel(loc_name_axs[1],  fontsize=25,labelpad=15)
+        axs.set_title(loc_name_axs[2],
+                      fontsize=28,loc="center" ,
+                      pad=15)
+        axs.tick_params(which='major', length=10, width=2)
+        plt.show();
+
     def main(self, tru_dat_inp, pred_dat_inp):
         self.round_ex() #It is a function which make string example of
         #rounding for decimal
@@ -111,8 +154,17 @@ class PR_plts():
         a1=self.set_data_fig(tru_dat) #make a frame for grid of axis
         a2=self.set_data_fig(pred_dat_inp) #make a frame for grid of axis
 
-        self.axs_marker(a1,self.number_x_mark)
-        self.axs_marker(a2,self.number_x_mark)
+        self.x_mark_num=self.axs_marker(a1,self.number_x_mark)
+        self.y_mark_num=self.axs_marker(a2,self.number_y_mark)
+        #predict data will be on the y-axsis
+        print(self.x_mark_num)
+        print(self.y_mark_num)
+        self.to_decimal()
+        print(self.x_mark_decim)
+        print(self.y_mark_decim)
+        print(tru_dat)
+        print(pred_dat)
+        self.plot_fig(tru_dat,pred_dat)
 
 a=PR_plts()
-t=a.main([1.009,1.1,2,2.111],[1,2.06])
+t=a.main([1.009,1.1,2,2.111],[1,2,2,6.06])
