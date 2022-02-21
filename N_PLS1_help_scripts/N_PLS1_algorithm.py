@@ -65,7 +65,7 @@ class Tri_PLS1_grid(RegressorMixin,BaseEstimator):
             
             
             
-            bf=np.dot((np.dot(np.linalg.inv(np.dot(T,T.transpose())-(((self.a/(10*f+1)))*np.eye(x.shape[0]))),T)).transpose(),
+            bf=np.dot((np.dot(np.linalg.inv(np.dot(T,T.transpose())-(((self.a/(f+1)))*np.eye(x.shape[0]))),T)).transpose(),
                           y.reshape([x.shape[0],1]))
             #print(bf.shape) (self.a/(f+1)
             #print((np.dot(T,bf)).shape).reshape(x.shape[1],x.shape[2])
