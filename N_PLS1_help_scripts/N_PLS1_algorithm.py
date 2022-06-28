@@ -2,14 +2,14 @@ import numpy as np
 from sklearn.base import BaseEstimator
 from sklearn.base import RegressorMixin
 from sklearn.metrics import mean_squared_error
-from numba import jit
+#from numba import jit
 
 class Tri_PLS1_grid(RegressorMixin,BaseEstimator):
     def  __init__(self, n_components=2,a=3):
         self.n_components = n_components
         self.a=a
         
-    @jit        
+    #@jit        
     def fit(self, xx, yy):
         """Fits the model to the data (X, y)
 
@@ -116,7 +116,7 @@ class Tri_PLS1_grid(RegressorMixin,BaseEstimator):
         
         Отбор длин волн я решил делать при помощи поглощающих жадных алгоритмов поиска. SBS алгоритм.
         """
-    @jit
+    #@jit
     def predict(self, xx):
         x=xx.copy()
         Tt=np.zeros([x.shape[0],self.n_components])
